@@ -9,7 +9,7 @@ import (
 
 func makeTaskQuene(f func(), n int) *taskQueue {
 	q := &taskQueue{}
-	for i:=0; i<n; i++ {
+	for i := 0; i < n; i++ {
 		t := taskPool.Get().(*task)
 		t.f = f
 		q.enqueue(t)
@@ -23,18 +23,17 @@ func TestTaskBase(t *testing.T) {
 		atomic.AddInt32(&num, 1)
 	}
 
-	q := makeTaskQuene(f, 2) 
+	q := makeTaskQuene(f, 2)
 
 	var i uint32 = 1
 	for tp := q.head; tp != nil; tp = tp.next {
 		tp.f()
-		assert.Equal(t, uint32(i), tp.id)
-		i ++
-		t.Logf("tid:%d, num:%d", tp.id, num)
+		assert.Equal(t, int32(i), num)
+		i++
 	}
 
 	tx := q.dequeue()
-	assert.Equal(t, uint32(1), tx.id)
+	t.Logf("tid:%d, num:%d", tx.id, num)
 
 	for tp := q.head; tp != nil; tp = tp.next {
 		t.Logf("tid:%d, num:%d", tp.id, num)
