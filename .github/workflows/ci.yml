@@ -15,4 +15,6 @@ jobs:
       - name: Run coverage
         run: go test -race -coverprofile=coverage.txt -covermode=atomic
       - name: Upload coverage to Codecov
+        env:
+          CODECOV_TOKEN: 598e0556-ce72-4f82-a46f-113f89c52ab1
         run: bash <(curl -s https://codecov.io/bash)
