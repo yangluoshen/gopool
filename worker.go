@@ -28,14 +28,18 @@ func newWorker() interface{} {
 
 func (w *worker) run() {
 	go func() {
+	/*
 		defer func() {
 			w.deferHandler()
 			w.recycle()
 		}()
+		*/
 		// run tasks one by one
 		for {
 			t := w.q.dequeue()
 			if t == nil {
+				w.deferHandler()
+				w.recycle()
 				return
 			}
 			defer func() {
@@ -47,6 +51,7 @@ func (w *worker) run() {
 			t.f()
 			t.recycle()
 		}
+
 	}()
 }
 
